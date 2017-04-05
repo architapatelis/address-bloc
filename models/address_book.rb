@@ -1,4 +1,5 @@
 require_relative 'entry'
+require "csv"
 
 class AddressBook
   attr_reader :entries
@@ -21,5 +22,21 @@ class AddressBook
 
     #insert new entry using calculated index
     entries.insert(index, Entry.new(name, phone_number, email))
+  end
+
+
+  def import_from_csv(file_name)
+    #start by reading the file
+    csv_text = File.read(file_name)
+    #CSV.parse results in an object of type CSV::Table
+    csv = CSV.parse(csv_text, headers: true, skip_blanks: true)
+
+    #iterate over CSV::Table object rows
+    csv.each do |row|
+      #convert each table row to hash (key/value)
+      row_hash = row.to_hash
+      # convert each row_hash to Entry in AddressBook
+      add_entry(row_hash["name"], row_hash["phone_number"], row_hash["email"])
+    end
   end
 end
