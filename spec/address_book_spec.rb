@@ -26,7 +26,7 @@ RSpec.describe AddressBook do
     end
   end
 
-  describe "#add entry" do
+  describe "#add_entry" do
     it "adds only one entry to the address book" do
       book.add_entry('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com')
 
@@ -83,8 +83,6 @@ RSpec.describe AddressBook do
       entry_five = book.entries[4]
       check_entry(entry_five, "Sussie", "555-555-2036", "sussie@blocmail.com")
     end
-
-
   end
 
   describe "#binary_search" do
@@ -136,5 +134,15 @@ RSpec.describe AddressBook do
       expect(entry).to be_nil
     end
 
+  end
+
+  describe "#demolish" do
+    it "should delete ALL entries" do
+      book.add_entry("Joe", "555-555-3660", "joe@blocmail.com")
+      book.add_entry("Sally", "555-555-4646", "sally@blocmail.com")
+
+      book.demolish
+      expect(book.entries.size).to eq 0
+    end
   end
 end

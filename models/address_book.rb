@@ -68,4 +68,8 @@ class AddressBook
     # match not found
     return nil
   end
+
+  def demolish
+    @entries = []
+  end
 end
