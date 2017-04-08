@@ -21,7 +21,7 @@ class AddressBook
       index+= 1
     end
 
-    #insert new entry using calculated index
+    #array.insert(index,obj) - inserts the given object before the element with the given index
     entries.insert(index, Entry.new(name, phone_number, email))
   end
 

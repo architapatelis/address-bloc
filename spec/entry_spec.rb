@@ -5,6 +5,8 @@ require_relative '../models/entry'
 RSpec.describe Entry do
   # initializer test (Entry attributes).
   describe "attributes" do
+    # using 'let' set variable 'entry' equal to content of '{}'
+    #'entry' is instance of class Entry
     let(:entry) { Entry.new('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com') }
     # Each it represents a unique test.
     # 'expect' used to declare the expectations for the test. If those expectations are met, our test passes, if they are not, it fails.

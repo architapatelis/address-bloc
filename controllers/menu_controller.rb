@@ -89,9 +89,44 @@ class MenuController
   end
 
   def search_entries
+    print "Search by name: "
+    name = gets.chomp
+
+    # call search on address_book which will either return a match or nil
+    match = address_book.binary_search(name)
+    system "clear"
+
+    # This expression evaluates to false if  search returns nil
+    if match
+      puts match.to_s
+      #call helper method
+      search_submenu(match)
+
+    else
+      puts "No match found for #{name}"
+    end
   end
 
   def read_csv
+    print "Enter CSV file to import: "
+    file_name = gets.chomp
+
+    # if file is empty send user back to main menu
+    if file_name.empty?
+      system "clear"
+      puts "No CSV file read"
+      main_menu
+    end
+
+    begin
+      # call the import_from_csv method on our address_book. It will in turn call the add_entry method that will add new entries.
+      entry_count = address_book.import_from_csv(file_name).count
+      system "clear"
+      puts "#{entry_count} new entries added from #{file_name}"
+    rescue
+      puts "#{file_name} is not a valid CSV file, please enter the name of a valid CSV file"
+      read_csv
+    end
   end
 
   def entry_submenu(entry)
@@ -110,8 +145,11 @@ class MenuController
       when "n"
 
       when "d"
+        delete_entry(entry)
 
       when "e"
+        edit_entry(entry)
+        entry_submenu(entry)
 
       #return user to main menu
       when "m"
@@ -121,6 +159,59 @@ class MenuController
         system "clear"
         puts "#{selction} is not a valid input"
         entry_submenu(entry)
+    end
+  end
+
+  def delete_entry(entry)
+    address_book.entries.delete(entry)
+    puts "#{entry.name} had been deleted"
+  end
+
+  def edit_entry(entry)
+    # #1 ask user to update fields
+    print "Updated name: "
+    name = gets.chomp
+    print "Updated phone number: "
+    phone_number = gets.chomp
+    print "Updated email: "
+    email = gets.chomp
+
+    # set attributes on entry only if a valid attribute was read from user input in #1 above
+    entry.name = name if !name.empty?
+    entry.phone_number = phone_number if !phone_number.empty?
+    entry.email = email if !email.empty?
+    system "clear"
+
+    puts "Updated entry: "
+    puts entry
+  end
+
+  def search_submenu(entry)
+    puts "\nd - delete entry"
+    puts "e - edit this entry"
+    puts "m - return to main menu"
+
+    selection = gets.chomp
+
+    case selection
+    when "d"
+      system "clear"
+      delete_entry(entry)
+      main_menu
+
+    when "e"
+      system "clear"
+      edit_entry(entry)
+      main_menu
+
+    when "m"
+      system "clear"
+      main_menu
+    else
+      system "clear"
+      puts "#{selection} is not a valid input"
+      puts entry.to_s
+      search_submenu(entry)
     end
   end
 end
